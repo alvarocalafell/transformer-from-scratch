@@ -10,7 +10,7 @@ class InputEmbeddings(nn.Module):
          super().__init__()
          self.d_model = d_model
          self.vocab_size = vocab_size
-         self.embedding = nn.embedding(vocab_size, d_model) #This is a pytorch layer that given a number provides the same vector every time. 
+         self.embedding = nn.Embedding(vocab_size, d_model) #This is a pytorch layer that given a number provides the same vector every time. 
                                                             #Mapping between numbers and vector of size 512 (d_model)
                                                             #This is a vector that is learnt by the model
     def forward(self, x):
@@ -23,7 +23,7 @@ class PositionalEncoding(nn.Module):
         "d_model: size of the vector that the positional enconding should be"
         "seq_len: max length of sentence, we need to create one vector per postion"
         "dropout: makes model less overfit"
-        super.__init__()
+        super().__init__()
         self.d_model = d_model
         self.seq_len = seq_len
         self.dropout = nn.Dropout(dropout)
@@ -33,7 +33,7 @@ class PositionalEncoding(nn.Module):
         
         #Create a vector of shape (seq_len, 1)
         "This formula comes from Attention is all you need paper with modifications in the div_term for numerical stability"
-        position = torch.arrange(0, seq_len, dtype=torch.float).unsqueeze(1)
+        position = torch.arange(0, seq_len, dtype=torch.float).unsqueeze(1)
         div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-math.log(10000.0)/ d_model))
         
         #Apply the sin to even positons
@@ -51,7 +51,7 @@ class PositionalEncoding(nn.Module):
 class LayerNormalization(nn.Module):
     
     def __init__(self, eps: float = 10**-6):
-        super.__init__()
+        super().__init__()
         self.eps = eps #This exists so that the denominator of the normalization is never 0 and numerical stability
         
         "This 2 parameters are there in order to modify the distributions in case needed by the model"
@@ -67,7 +67,7 @@ class LayerNormalization(nn.Module):
 class FeedForwardBlock(nn.Module):
     
     def __init__(self, d_model: int, d_ff: int, dropout: float):
-        super.__init__()
+        super().__init__()
         self.linear_1 = nn.Linear(d_model,d_ff) #W1 and B1 from paper
         self.dropout = nn.Dropout(dropout)
         self.linear_2 = nn.Linear(d_ff, d_model) #W2 and B2 (No Bias included because it's active by default)
@@ -80,7 +80,7 @@ class MultiHeadAttentionBlock(nn.Module):
     
     def __init__(self, d_model: int, h: int, dropout: float):
         "We're going to divide or models into h heads so d_model ahs to be divisible by h to divide equally"
-        super.__init__()
+        super().__init__()
         self.d_model = d_model
         self.h = h
         assert d_model % h == 0, "d_model is not divisible by h" #d_k = d_model / h
@@ -141,7 +141,7 @@ class MultiHeadAttentionBlock(nn.Module):
 class ResidualConnection(nn.Module):
     
     def __init__(self, dropout: float):
-        super.__init__()
+        super().__init__()
         self.dropout = nn.Dropout(dropout)
         self.norm = LayerNormalization()
         
@@ -153,7 +153,7 @@ class ResidualConnection(nn.Module):
 class EncoderBlock(nn.Module):
     
     def __init__(self, self_attention_block: MultiHeadAttentionBlock, feed_forward_block: FeedForwardBlock, dropout: float):
-        super.__init__()
+        super().__init__()
         self.self_attention_block = self_attention_block
         self.feed_forward_block = feed_forward_block
         self.residual_connections = nn.ModuleList([ResidualConnection(dropout) for _ in range(2)])
@@ -168,7 +168,7 @@ class EncoderBlock(nn.Module):
 class Encoder(nn.Module):
     
     def __init__(self, layers: nn.ModuleList):
-        super.__init__()
+        super().__init__()
         self.layers = layers
         self.norm = LayerNormalization()
         
@@ -182,7 +182,7 @@ class Encoder(nn.Module):
 class DecoderBlock(nn.Module):
     
     def __init__(self,self_attention_block: MultiHeadAttentionBlock, cross_attention_block: MultiHeadAttentionBlock, feed_forward_block: FeedForwardBlock, dropout: float):
-        super.__init__()
+        super().__init__()
         self.self_attention_block = self_attention_block
         self.cross_attention_block= cross_attention_block
         self.feed_forward_block = feed_forward_block
@@ -198,7 +198,7 @@ class DecoderBlock(nn.Module):
 class Decoder(nn.Module):
     
     def __init__(self, layers: nn.ModuleList):
-        super.__init__()
+        super().__init__()
         self.layers = layers
         self.norm = LayerNormalization()
         
@@ -273,8 +273,8 @@ def build_transformer(src_vocab_size: int, tgt_vocab_size: int, src_seq_len: int
         decoder_blocks.append(decoder_block)
         
     # Create the Encoder and the Decoder
-    encoder = Encoder(nn.ModuleList[encoder_blocks])
-    decoder = Decoder(nn.ModuleList[decoder_blocks])
+    encoder = Encoder(nn.ModuleList(encoder_blocks))
+    decoder = Decoder(nn.ModuleList(decoder_blocks))
     
     # Create the projection layer
     projection_layer = ProjectionLayer(d_model, tgt_vocab_size)
