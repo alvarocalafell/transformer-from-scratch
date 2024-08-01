@@ -37,8 +37,7 @@ class BilingualDataset(Dataset):
         # seq_len so we use the padding tokens to fill the sentence until it reaches the seq_len
         enc_num_padding_tokens = self.seq_len - len(enc_input_tokens) - 2 # The -2 comes from adding the SOS and EOS tokens to the encoder side
         dec_num_padding_tokens = self.seq_len - len(dec_input_tokens) - 1 # Only -1 because when training, decoder side only has SOS token and then in the label we add the EOS token
-        print(enc_num_padding_tokens)
-        print(dec_num_padding_tokens)
+        
         if enc_num_padding_tokens < 0 or dec_num_padding_tokens < 0:
             raise ValueError('Sentence is too long')
         
@@ -59,7 +58,7 @@ class BilingualDataset(Dataset):
         decoder_input = torch.cat(
             [
                 self.sos_token,
-                torch.tensor(enc_input_tokens, dtype=torch.int64),
+                torch.tensor(dec_input_tokens, dtype=torch.int64),
                 torch.tensor([self.pad_token] * dec_num_padding_tokens, dtype=torch.int64)
             ]
         )

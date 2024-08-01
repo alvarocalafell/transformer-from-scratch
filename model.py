@@ -60,7 +60,7 @@ class LayerNormalization(nn.Module):
         
     def forward(self, x):
         mean = x.mean(dim = -1, keepdim= True) #Everything after batchsize, Normally mean cancels dimensions to which its applied but we wsnt to keep it
-        std = x.std(dime = -1, keepdim= True)
+        std = x.std(dim = -1, keepdim= True)
         return self.alpha * (x - mean) / (std - self.eps) + self.bias 
     
     
@@ -106,7 +106,7 @@ class MultiHeadAttentionBlock(nn.Module):
         if mask is not None:
             attention_scores.masked_fill_(mask == 0, -1e9)  #This is for example if we don't want words to be included in the attention
                                                             #For example padding words that are just filler words to get to the min seq_len
-        attention_scores = attention_scores.softmax(div = -1) #(Batch, h, seq_len, seq_len)
+        attention_scores = attention_scores.softmax(dim = -1) #(Batch, h, seq_len, seq_len)
         if dropout is not None:
             attention_scores = dropout(attention_scores)
         
@@ -162,7 +162,7 @@ class EncoderBlock(nn.Module):
         "We need the src_mask to mask the padding words" #Look into it
         
         x = self.residual_connections[0](x, lambda x: self.self_attention_block(x, x, x, src_mask)) #Each word of the sentence is interacting with other words of the same sentence, hence the name self-attention
-        x = self.feed_forward_block[1](x, self.feed_forward_block) #In the case of the Decoder, we have cross-attention where the queries from the decoder are watching the keys and values coming from the encoder.  
+        x = self.residual_connections[1](x, self.feed_forward_block) #In the case of the Decoder, we have cross-attention where the queries from the decoder are watching the keys and values coming from the encoder.  
         return x
     
 class Encoder(nn.Module):

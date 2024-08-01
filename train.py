@@ -118,7 +118,7 @@ def train_model(config):
             
             # Run the tensors through the transformer
             encoder_output = model.encode(encoder_input, encoder_mask) # (B, seq_len, d_model)
-            decoder_output = model.encode(encoder_output, encoder_mask, decoder_input, decoder_mask) # (B, seq_len, d_nodel)
+            decoder_output = model.decode(encoder_output, encoder_mask, decoder_input, decoder_mask) # (B, seq_len, d_nodel)
             proj_output = model.project(decoder_output) # (B, seq_len, tgt_vocab_size)
             
             label = batch['label'].to(device) # (B, seq_len) For each dimension tells us the position on our vocab of that particular word. 
@@ -126,7 +126,7 @@ def train_model(config):
             #Therefore for it to be comparable we need to compute the loss first
             # (B, seq_len, tgt_vocab_size) -->(B * seq_len, tgt_vocab_size)
             loss = loss_fn(proj_output.view(-1, tokenizer_tgt.get_vocab_size()), label.view(-1))
-            batch_iterator.set_postfix({f'loss:' f"{loss.item():6.3f}"}) #This updates our progress bar
+            batch_iterator.set_postfix({"loss": f"{loss.item():6.3f}"}) #This updates our progress bar
             
             #Log the loss on tensorboard
             writer.add_scalar('train loss', loss.item(), global_step)
