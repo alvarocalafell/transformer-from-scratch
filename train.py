@@ -98,7 +98,7 @@ def run_validation(model, validation_ds, tokenizer_src, tokenizer_tgt, max_len, 
     
 
 def get_or_build_tokenizer(config, ds, lang):
-    #config['tokenizer_file'] = '../tokemizer/tokenizer_{0}.json' creates file in the correspondent language
+    #config['tokenizer_file'] = '../tokenizer/tokenizer_{0}.json' creates file in the correspondent language
     tokenizer_path = Path(config['tokenizer_file'].format(lang))
     if not Path.exists(tokenizer_path):
         tokenizer = Tokenizer(WordLevel(unk_token="[UNK]")) # Will map to the number corresponding to this word if word is new/not recognized
