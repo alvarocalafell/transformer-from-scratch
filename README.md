@@ -138,6 +138,10 @@ The `tokenizer_{lang}.json` files contain the vocabulary embeddings for each lan
 - Optimize for inference speed
 - Integrate with a web interface for easy usage
 
+## Acknowledgements
+
+This project was created following the excellent tutorials and explanations by [Umar Jamil](https://www.youtube.com/@umarjamilai) on YouTube. His clear and detailed videos were instrumental in understanding and implementing the Transformer architecture.
+
 ## Contributing
 
 Contributions to improve the model or extend its functionality are welcome. Please feel free to submit pull requests or open issues for any bugs or feature requests.
