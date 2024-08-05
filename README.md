@@ -16,8 +16,7 @@ This project implements a Transformer model from scratch, based on the "Attentio
 
 ## Overview
 
-This project aims to provide a deep understanding of Transformer architecture by implementing it from scratch. The model is built using PyTorch and follows the architecture described in the seminal paper "Attention Is All You Need" by Vaswani et al.
-
+This project aims to provide a deep understanding of Transformer architecture by implementing it from scratch. The model is built using PyTorch and follows the architecture described in the seminal paper ["Attention Is All You Need"](https://arxiv.org/abs/1706.03762) by Vaswani et al.
 ## Features
 
 - Complete Transformer architecture implementation
@@ -38,15 +37,14 @@ This project aims to provide a deep understanding of Transformer architecture by
 ## Getting Started
 
 1. Clone the repository:
-git clone https://github.com/your-username/transformer-from-scratch.git
-cd transformer-from-scratch
 
-2. Install the required dependencies:
-pip install -r requirements.txt
+`git clone https://github.com/your-username/transformer-from-scratch.git`
+
+`cd transformer-from-scratch`
+
+2. Install the required dependencies: `pip install -r requirements.txt`
 
 3. Download the required dataset (e.g., opus_books for English-Italian)
-
-
 
 
 # Transformer for Neural Machine Translation
